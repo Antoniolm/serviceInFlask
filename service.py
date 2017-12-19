@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import jsonify
+from flask import render_template
 from flask_mysqldb import MySQL
 import MySQLdb
 
@@ -12,7 +13,11 @@ conn = MySQLdb.connect(host="localhost",
 cursor = conn.cursor()
 
 @app.route("/")
-def getStatus():    
+def root():
+    return jsonify(login="success")
+
+@app.route("/login")
+def login():
     cursor = conn.cursor()
     cursor.execute("SELECT * from users where name='antonio' and password='prueba'")
     data = cursor.fetchone()
@@ -21,8 +26,28 @@ def getStatus():
     else:
         return jsonify(login="success")
 
-@app.route("/authenticate")
-def authenticate():
+@app.route("/registry")
+def registry():
+    return jsonify(login="success")
+
+@app.route("/rmUser")
+def rmUser():
+    return jsonify(login="success")
+
+@app.route("/addProduct")
+def addProduct():
+    return jsonify(login="success")
+
+@app.route("/modifyProduct")
+def modifyProduct():
+    return jsonify(login="success")
+
+@app.route("/deleteProduct")
+def deleteProduct():
+    return jsonify(login="success")
+
+@app.route("/getCatalog")
+def getCatalog():
     return jsonify(login="success")
 
 if __name__ == '__main__':
