@@ -4,7 +4,7 @@ MAINTAINER Antonio David López Machado <antdlopma@gmail.com>
 WORKDIR /app
 
 ADD service.py /app/service.py
-ADD prueba.sql /app/prueba.sql
+ADD dbSchema.sql /app/dbSchema.sql
 
 RUN apt-get -y update
 RUN apt-get -y upgrade
