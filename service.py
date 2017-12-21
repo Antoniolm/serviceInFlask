@@ -20,14 +20,13 @@ data = cursor.fetchone()
 
 # Si no lo esta
 if data[0]==0:
-    os.system("mysql -u root -proot < prueba.sql ")
+    os.system("mysql -u root -proot < dbSchema.sql ")
 else: #Si lo esta
     db.close();
     db = MySQLdb.connect(host="localhost",
                          user = "root",
                          passwd = "root",
                          db = "pharmaciesDB")
-
 
 @app.route("/")
 def root():
@@ -51,8 +50,8 @@ def login():
 def registry():
     cursor = db.cursor()
     #data = cursor.execute("INSERT INTO users (name,password,client) VALUES("'+name+'","'+password+'","'+client+'")")
-    db.commit()
     cursor.execute("INSERT INTO users (name,password,client) VALUES('prueba','prueba',0)")
+    db.commit()
     return "hola"
 
 @app.route("/rmUser")
@@ -65,8 +64,9 @@ def rmUser():
 
 @app.route("/addProduct")
 def addProduct():
+    db.commit()
     cursor = db.cursor()
-    cursor.execute("INSERT INTO users (name,quantity,price) VALUES('pruebaProducto',5,65)")
+    cursor.execute("INSERT INTO catalog (name,quantity,price) VALUES('pruebaProducto',5,65)")
     db.commit()
     return jsonify(login="success")
 
@@ -88,11 +88,11 @@ def doRequest():
 
 @app.route("/getCatalog")
 def getCatalog():
-    return jsonify(login="success")
+    cursor = db.cursor()
+    cursor.execute("SELECT name,quantity,price FROM catalog")
+    for row in cursor:
+    print row
 
-@app.route("/createDataBase")
-def createDataBase():
-    os.system("mysql -u root -proot < prueba.sql ")
     return jsonify(login="success")
 
 if __name__ == '__main__':
@@ -102,11 +102,3 @@ if __name__ == '__main__':
 # sudo docker run -p 5000:5000 -t antonio/prueba
 # apt-get python-dev mysql-server libmysqlclient-dev
 # pip install mysqlclient flask flask-mysqldb
-#
-# CREATE DATABASE pharmaciesDB
-#
-# CREATE TABLE users ( id INT NULL AUTO_INCREMENT, name VARCHAR(45) NULL,
-# password VARCHAR(45) NULL, client tinyint(1) ,PRIMARY KEY (id));
-#
-# CREATE TABLE catalog ( id INT NULL AUTO_INCREMENT, name VARCHAR(45) NULL,
-# quantity INT NULL, price INT NULL, PRIMARY KEY (id));
