@@ -1,4 +1,4 @@
-CREATE DATABASE pharmaciesDB
+CREATE DATABASE pharmaciesDB;
 use pharmaciesDB;
 
 CREATE TABLE users ( id INT NULL AUTO_INCREMENT,
@@ -13,10 +13,10 @@ CREATE TABLE catalog ( id INT NULL AUTO_INCREMENT,
                        PRIMARY KEY (id));
 
 
-INSERT INTO users (name,password,client) VALUES('antonio','prueba',1)
-INSERT INTO users (name,password,client) VALUES('farmaceutico','pruebafar',0)
+INSERT INTO users (name,password,client) VALUES('antonio','prueba',1);
+INSERT INTO users (name,password,client) VALUES('farmaceutico','pruebafar',0);
 
-INSERT INTO catalog (name,quantity,price) VALUES('gelocatil',5,10)
-INSERT INTO catalog (name,quantity,price) VALUES('aspirina',50,2)
-INSERT INTO catalog (name,quantity,price) VALUES('vendas',25,3)
-INSERT INTO catalog (name,quantity,price) VALUES('baston',3,20)
+INSERT INTO catalog (name,quantity,price) VALUES('gelocatil',5,10);
+INSERT INTO catalog (name,quantity,price) VALUES('aspirina',50,2);
+INSERT INTO catalog (name,quantity,price) VALUES('vendas',25,3);
+INSERT INTO catalog (name,quantity,price) VALUES('baston',3,20);
