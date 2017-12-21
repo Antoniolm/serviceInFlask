@@ -91,7 +91,7 @@ def getCatalog():
     cursor = db.cursor()
     cursor.execute("SELECT name,quantity,price FROM catalog")
     for row in cursor:
-    print row
+        print row
 
     return jsonify(login="success")
 
