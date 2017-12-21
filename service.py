@@ -37,33 +37,37 @@ def root():
     print(data[0])
     return "yeah"
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
+    username = request.args.get('nm')
+    password = request.args.get('pass')
     cursor = db.cursor()
-    cursor.execute("SELECT * from users where name='antonio' and password='prueba'")
+    cursor.execute("SELECT * from users where name='" + username + "' and password='"+password+"'")
     data = cursor.fetchone()
     if data is None:
         return jsonify(login="fail")
     else:
         return jsonify(login="success")
 
-@app.route("/registry")
+@app.route("/registry", methods=['GET', 'POST'])
 def registry():
+    username = request.args.get('nm')
+    password = request.args.get('pass')
+    client = request.args.get('client')
     cursor = db.cursor()
-    #data = cursor.execute("INSERT INTO users (name,password,client) VALUES("'+name+'","'+password+'","'+client+'")")
-    cursor.execute("INSERT INTO users (name,password,client) VALUES('prueba','prueba',0)")
+    data = cursor.execute("INSERT INTO users (name,password,client) VALUES('"+username+"','"+password+"',"+client+")")
     db.commit()
     return "hola"
 
-@app.route("/rmUser")
+@app.route("/rmUser", methods=['GET', 'POST'])
 def rmUser():
-    id=7;
+    id= request.args.get('id')
     cursor = db.cursor()
     cursor.execute("DELETE FROM users where id="+id);
     db.commit()
     return "Removed User"
 
-@app.route("/addProduct")
+@app.route("/addProduct", methods=['GET', 'POST'])
 def addProduct():
     db.commit()
     cursor = db.cursor()
@@ -71,11 +75,11 @@ def addProduct():
     db.commit()
     return jsonify(login="success")
 
-@app.route("/modifyProduct")
+@app.route("/modifyProduct", methods=['GET', 'POST'])
 def modifyProduct():
     return jsonify(login="success")
 
-@app.route("/deleteProduct")
+@app.route("/deleteProduct", methods=['GET', 'POST'])
 def deleteProduct():
     id=7;
     cursor = db.cursor()
@@ -83,7 +87,7 @@ def deleteProduct():
     db.commit()
     return "Removed Product"
 
-@app.route("/doRequest")
+@app.route("/doRequest", methods=['GET', 'POST'])
 def doRequest():
     return jsonify(login="success")
 
