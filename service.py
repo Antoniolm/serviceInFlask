@@ -4,6 +4,7 @@ from flask import render_template
 from flask import request
 from flask_mysqldb import MySQL
 import MySQLdb
+import json
 import os
 
 app = Flask(__name__)
@@ -88,12 +89,13 @@ def doRequest():
 
 @app.route("/getCatalog")
 def getCatalog():
+    jsonResult= jsonify()
     cursor = db.cursor()
-    cursor.execute("SELECT name,quantity,price FROM catalog")
-    for row in cursor:
-        print row
+    rows=cursor.execute("SELECT name,quantity,price FROM catalog")
 
-    return jsonify(login="success")
+    columns = cursor.description
+    result = [{columns[index][0]:column for index, column in enumerate(value)}   for value in cursor.fetchall()]
+    return jsonify(result);
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0')
