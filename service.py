@@ -42,8 +42,10 @@ def login():
     username = request.args.get('nm')
     password = request.args.get('pass')
     cursor = db.cursor()
-    cursor.execute("SELECT * from users where name='" + username + "' and password='"+password+"'")
+
+    cursor.execute("SELECT * from users where name=%s and password=%s",(username,password))
     data = cursor.fetchone()
+
     if data is None:
         return jsonify(login="fail")
     else:
@@ -53,26 +55,34 @@ def login():
 def registry():
     username = request.args.get('nm')
     password = request.args.get('pass')
-    client = request.args.get('client')
+    client = int(request.args.get('client'))
+
     cursor = db.cursor()
-    data = cursor.execute("INSERT INTO users (name,password,client) VALUES('"+username+"','"+password+"',"+client+")")
+    data = cursor.execute("INSERT INTO users (name,password,client) VALUES(%s,%s,%s)",(username,password,client))
     db.commit()
+
     return "hola"
 
 @app.route("/rmUser", methods=['GET', 'POST'])
 def rmUser():
     id= request.args.get('id')
+
     cursor = db.cursor()
-    cursor.execute("DELETE FROM users where id="+id);
+    cursor.execute("DELETE FROM users where id=%s", id);
     db.commit()
+
     return "Removed User"
 
 @app.route("/addProduct", methods=['GET', 'POST'])
 def addProduct():
-    db.commit()
+    name = request.args.get('nm')
+    quantity = int(request.args.get('quantity'))
+    price = int(request.args.get('price'))
+
     cursor = db.cursor()
-    cursor.execute("INSERT INTO catalog (name,quantity,price) VALUES('pruebaProducto',5,65)")
+    cursor.execute("INSERT INTO catalog (name,quantity,price) VALUES(%s,%s,%s)", (name,quantity,price))
     db.commit()
+
     return jsonify(login="success")
 
 @app.route("/modifyProduct", methods=['GET', 'POST'])
@@ -81,10 +91,12 @@ def modifyProduct():
 
 @app.route("/deleteProduct", methods=['GET', 'POST'])
 def deleteProduct():
-    id=7;
+    id= request.args.get('id')
+
     cursor = db.cursor()
-    cursor.execute("DELETE FROM catalog where id="+id);
+    cursor.execute("DELETE FROM catalog where id=%s", id);
     db.commit()
+
     return "Removed Product"
 
 @app.route("/doRequest", methods=['GET', 'POST'])
