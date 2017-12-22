@@ -37,6 +37,41 @@ def root():
     print(data[0])
     return "yeah"
 
+@app.route("/users/<idUser>", methods=['GET', 'POST' , 'DELETE'])
+def users(idUser):
+    if request.method == 'GET':
+        #idUser = request.args.get('id')
+        cursor = db.cursor()
+
+        cursor.execute("SELECT * from users where id=%s", idUser)
+        data = cursor.fetchone()
+
+        if data is None:
+            return jsonify(users="notFound")
+        else:
+            return jsonify(name=data[1],password=data[2])
+
+    if request.method == 'POST':
+        username = request.form['nm']
+        password = request.form['pass']
+        client = int(request.form['client'])
+
+        cursor = db.cursor()
+        data = cursor.execute("INSERT INTO users (name,password,client) VALUES(%s,%s,%s)",(username,password,client))
+        db.commit()
+
+        return jsonify(registry="success")
+
+    if request.method == 'DELETE':
+        #idU= request.args.get('id')
+
+        cursor = db.cursor()
+        cursor.execute("DELETE FROM users where id=%s", idUser);
+        db.commit()
+
+        return jsonify(removeUser="success")
+    return jsonify(error="DontMethodDetected")
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     username = request.args.get('nm')
@@ -50,28 +85,6 @@ def login():
         return jsonify(login="fail")
     else:
         return jsonify(login="success")
-
-@app.route("/registry", methods=['GET', 'POST'])
-def registry():
-    username = request.args.get('nm')
-    password = request.args.get('pass')
-    client = int(request.args.get('client'))
-
-    cursor = db.cursor()
-    data = cursor.execute("INSERT INTO users (name,password,client) VALUES(%s,%s,%s)",(username,password,client))
-    db.commit()
-
-    return "hola"
-
-@app.route("/rmUser", methods=['GET', 'POST'])
-def rmUser():
-    id= request.args.get('id')
-
-    cursor = db.cursor()
-    cursor.execute("DELETE FROM users where id=%s", id);
-    db.commit()
-
-    return "Removed User"
 
 @app.route("/addProduct", methods=['GET', 'POST'])
 def addProduct():
@@ -103,7 +116,7 @@ def deleteProduct():
 def doRequest():
     return jsonify(login="success")
 
-@app.route("/getCatalog")
+@app.route("/getCatalog", methods=['GET', 'POST'])
 def getCatalog():
     jsonResult= jsonify()
     cursor = db.cursor()
@@ -115,6 +128,10 @@ def getCatalog():
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0')
+
+#curl -X POST localhost:5000/users/0 -d nm=post2 -d pass=sip -d client=0
+#curl -X DELETE localhost:5000/users/6
+#curl localhost:5000/users/2
 
 # sudo docker build -t antoniolm/prueba .
 # sudo docker run -p 5000:5000 -t antonio/prueba
