@@ -37,6 +37,32 @@ def root():
     print(data[0])
     return "yeah"
 
+@app.route("/users", methods=['GET', 'POST'])
+def users(idUser):
+    if request.method == 'GET':
+        cursor = db.cursor()
+
+        cursor.execute("SELECT * from users)
+        data = cursor.fetchone()
+
+        if data is None:
+            return jsonify(users="notFound")
+        else:
+            return jsonify(name=data[1],password=data[2])
+
+    if request.method == 'POST':
+        username = request.form['nm']
+        password = request.form['pass']
+        client = int(request.form['client'])
+
+        cursor = db.cursor()
+        data = cursor.execute("INSERT INTO users (name,password,client) VALUES(%s,%s,%s)",(username,password,client))
+        db.commit()
+
+        return jsonify(registry="success")
+
+    return jsonify(error="DontMethodDetected")
+
 @app.route("/users/<idUser>", methods=['GET', 'POST' , 'DELETE'])
 def users(idUser):
     if request.method == 'GET':
@@ -57,7 +83,7 @@ def users(idUser):
         client = int(request.form['client'])
 
         cursor = db.cursor()
-        data = cursor.execute("INSERT INTO users (name,password,client) VALUES(%s,%s,%s)",(username,password,client))
+        data = cursor.execute("UPDATE MyGuests SET name=%s, password=%s, client=%s WHERE id=%s", (username,password,client,idUser))
         db.commit()
 
         return jsonify(registry="success")
@@ -86,17 +112,40 @@ def login():
     else:
         return jsonify(login="success")
 
-@app.route("/addProduct", methods=['GET', 'POST'])
-def addProduct():
-    name = request.args.get('nm')
-    quantity = int(request.args.get('quantity'))
-    price = int(request.args.get('price'))
+@app.route("/product/<idProduct>", methods=['GET', 'POST' , 'DELETE'])
+def users(idProduct):
+    if request.method == 'GET':
+        #idUser = request.args.get('id')
+        cursor = db.cursor()
 
-    cursor = db.cursor()
-    cursor.execute("INSERT INTO catalog (name,quantity,price) VALUES(%s,%s,%s)", (name,quantity,price))
-    db.commit()
+        cursor.execute("SELECT * from users where id=%s", idUser)
+        data = cursor.fetchone()
 
-    return jsonify(login="success")
+        if data is None:
+            return jsonify(users="notFound")
+        else:
+            return jsonify(name=data[1],password=data[2])
+
+    if request.method == 'POST':
+        name = request.args.get('nm')
+        quantity = int(request.args.get('quantity'))
+        price = int(request.args.get('price'))
+
+        cursor = db.cursor()
+        cursor.execute("INSERT INTO catalog (name,quantity,price) VALUES(%s,%s,%s)", (name,quantity,price))
+        db.commit()
+
+        return jsonify(addProduct="success")
+
+    if request.method == 'DELETE':
+        #idU= request.args.get('id')
+
+        cursor = db.cursor()
+        cursor.execute("DELETE FROM catalog where id=%s", idUser);
+        db.commit()
+
+        return jsonify(removeProduct="success")
+    return jsonify(error="DontMethodDetected")
 
 @app.route("/modifyProduct", methods=['GET', 'POST'])
 def modifyProduct():
