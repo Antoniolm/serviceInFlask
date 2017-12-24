@@ -81,7 +81,7 @@ def user(idUser):
             return jsonify(name=data[1],password=data[2])
 
     if request.method == 'POST':
-        username = request.form['nm']
+        username = request.form['name']
         password = request.form['pass']
         client = int(request.form['client'])
 
@@ -131,9 +131,9 @@ def products():
         return jsonify(result);
 
     if request.method == 'POST':
-        name = request.args.get('nm')
-        quantity = int(request.args.get('quantity'))
-        price = int(request.args.get('price'))
+        name = request.form['name']
+        quantity = int(request.form['quantity'])
+        price = int(request.form['price'])
 
         cursor = db.cursor()
         cursor.execute("INSERT INTO catalog (name,quantity,price) VALUES(%s,%s,%s)", (name,quantity,price))
@@ -160,9 +160,9 @@ def product(idProduct):
             return jsonify(name=data[1],password=data[2])
 
     if request.method == 'POST':
-        name = request.args.get('nm')
-        quantity = int(request.args.get('quantity'))
-        price = int(request.args.get('price'))
+        name = request.form['name']
+        quantity = int(request.form['quantity'])
+        price = int(request.form['price'])
 
         cursor = db.cursor()
         data = cursor.execute("UPDATE catalog SET name=%s, quantity=%s, price=%s WHERE id=%s", (name,quantity,price,idProduct))
