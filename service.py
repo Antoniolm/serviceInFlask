@@ -37,18 +37,20 @@ def root():
     print(data[0])
     return "yeah"
 
+########################
+## Users
+#######################
+
 @app.route("/users", methods=['GET', 'POST'])
-def users(idUser):
+def users():
     if request.method == 'GET':
+        jsonResult= jsonify()
         cursor = db.cursor()
+        rows=cursor.execute("SELECT name,password,client FROM users")
 
-        cursor.execute("SELECT * from users)
-        data = cursor.fetchone()
-
-        if data is None:
-            return jsonify(users="notFound")
-        else:
-            return jsonify(name=data[1],password=data[2])
+        columns = cursor.description
+        result = [{columns[index][0]:column for index, column in enumerate(value)}   for value in cursor.fetchall()]
+        return jsonify(result);
 
     if request.method == 'POST':
         username = request.form['nm']
@@ -63,17 +65,18 @@ def users(idUser):
 
     return jsonify(error="DontMethodDetected")
 
+###################################################################
+
 @app.route("/users/<idUser>", methods=['GET', 'POST' , 'DELETE'])
-def users(idUser):
+def user(idUser):
     if request.method == 'GET':
-        #idUser = request.args.get('id')
         cursor = db.cursor()
 
         cursor.execute("SELECT * from users where id=%s", idUser)
         data = cursor.fetchone()
 
         if data is None:
-            return jsonify(users="notFound")
+            return jsonify(error="UsernotFound")
         else:
             return jsonify(name=data[1],password=data[2])
 
@@ -83,20 +86,20 @@ def users(idUser):
         client = int(request.form['client'])
 
         cursor = db.cursor()
-        data = cursor.execute("UPDATE MyGuests SET name=%s, password=%s, client=%s WHERE id=%s", (username,password,client,idUser))
+        data = cursor.execute("UPDATE users SET name=%s, password=%s, client=%s WHERE id=%s", (username,password,client,idUser))
         db.commit()
 
         return jsonify(registry="success")
 
     if request.method == 'DELETE':
-        #idU= request.args.get('id')
-
         cursor = db.cursor()
         cursor.execute("DELETE FROM users where id=%s", idUser);
         db.commit()
 
         return jsonify(removeUser="success")
     return jsonify(error="DontMethodDetected")
+
+###################################################################
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -112,19 +115,20 @@ def login():
     else:
         return jsonify(login="success")
 
-@app.route("/product/<idProduct>", methods=['GET', 'POST' , 'DELETE'])
-def users(idProduct):
+########################
+## Products
+########################
+
+@app.route("/products", methods=['GET', 'POST' , 'DELETE'])
+def products():
     if request.method == 'GET':
-        #idUser = request.args.get('id')
+        jsonResult= jsonify()
         cursor = db.cursor()
+        rows=cursor.execute("SELECT name,quantity,price FROM catalog")
 
-        cursor.execute("SELECT * from users where id=%s", idUser)
-        data = cursor.fetchone()
-
-        if data is None:
-            return jsonify(users="notFound")
-        else:
-            return jsonify(name=data[1],password=data[2])
+        columns = cursor.description
+        result = [{columns[index][0]:column for index, column in enumerate(value)}   for value in cursor.fetchall()]
+        return jsonify(result);
 
     if request.method == 'POST':
         name = request.args.get('nm')
@@ -137,43 +141,50 @@ def users(idProduct):
 
         return jsonify(addProduct="success")
 
-    if request.method == 'DELETE':
-        #idU= request.args.get('id')
+    return jsonify(error="DontMethodDetected")
+
+###################################################################
+
+@app.route("/products/<idProduct>", methods=['GET', 'POST' , 'DELETE'])
+def product(idProduct):
+    if request.method == 'GET':
+        #idUser = request.args.get('id')
+        cursor = db.cursor()
+
+        cursor.execute("SELECT * from users where id=%s", idProduct)
+        data = cursor.fetchone()
+
+        if data is None:
+            return jsonify(error="ProductnotFound")
+        else:
+            return jsonify(name=data[1],password=data[2])
+
+    if request.method == 'POST':
+        name = request.args.get('nm')
+        quantity = int(request.args.get('quantity'))
+        price = int(request.args.get('price'))
 
         cursor = db.cursor()
-        cursor.execute("DELETE FROM catalog where id=%s", idUser);
+        data = cursor.execute("UPDATE catalog SET name=%s, quantity=%s, price=%s WHERE id=%s", (name,quantity,price,idProduct))
+        db.commit()
+
+        return jsonify(addProduct="success")
+
+    if request.method == 'DELETE':
+        cursor = db.cursor()
+        cursor.execute("DELETE FROM catalog where id=%s", idProduct);
         db.commit()
 
         return jsonify(removeProduct="success")
     return jsonify(error="DontMethodDetected")
 
-@app.route("/modifyProduct", methods=['GET', 'POST'])
-def modifyProduct():
-    return jsonify(login="success")
-
-@app.route("/deleteProduct", methods=['GET', 'POST'])
-def deleteProduct():
-    id= request.args.get('id')
-
-    cursor = db.cursor()
-    cursor.execute("DELETE FROM catalog where id=%s", id);
-    db.commit()
-
-    return "Removed Product"
+###################################################################
 
 @app.route("/doRequest", methods=['GET', 'POST'])
 def doRequest():
     return jsonify(login="success")
 
-@app.route("/getCatalog", methods=['GET', 'POST'])
-def getCatalog():
-    jsonResult= jsonify()
-    cursor = db.cursor()
-    rows=cursor.execute("SELECT name,quantity,price FROM catalog")
-
-    columns = cursor.description
-    result = [{columns[index][0]:column for index, column in enumerate(value)}   for value in cursor.fetchall()]
-    return jsonify(result);
+###################################################################
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0')
