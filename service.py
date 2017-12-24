@@ -53,8 +53,8 @@ def users():
         return jsonify(result);
 
     if request.method == 'POST':
-        username = request.form['nm']
-        password = request.form['pass']
+        username = request.form['name']
+        password = request.form['password']
         client = int(request.form['client'])
 
         cursor = db.cursor()
@@ -78,11 +78,11 @@ def user(idUser):
         if data is None:
             return jsonify(error="UsernotFound")
         else:
-            return jsonify(name=data[1],password=data[2])
+            return jsonify(name=data[1],password=data[2],client=data[3])
 
     if request.method == 'POST':
         username = request.form['name']
-        password = request.form['pass']
+        password = request.form['password']
         client = int(request.form['client'])
 
         cursor = db.cursor()
@@ -148,16 +148,15 @@ def products():
 @app.route("/products/<idProduct>", methods=['GET', 'POST' , 'DELETE'])
 def product(idProduct):
     if request.method == 'GET':
-        #idUser = request.args.get('id')
         cursor = db.cursor()
 
-        cursor.execute("SELECT * from users where id=%s", idProduct)
+        cursor.execute("SELECT * from catalog where id=%s", idProduct)
         data = cursor.fetchone()
 
         if data is None:
             return jsonify(error="ProductnotFound")
         else:
-            return jsonify(name=data[1],password=data[2])
+            return jsonify(name=data[1],quantity=data[2],price=data[3])
 
     if request.method == 'POST':
         name = request.form['name']
