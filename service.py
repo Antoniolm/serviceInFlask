@@ -9,6 +9,7 @@ import os
 
 app = Flask(__name__)
 
+os.system("service mysql start")
 db = MySQLdb.connect(host="localhost",
                        user = "root",
                        passwd = "root",
@@ -101,10 +102,10 @@ def user(idUser):
 
 ###################################################################
 
-@app.route("/login", methods=['GET', 'POST'])
+@app.route("/login", methods=['POST'])
 def login():
-    username = request.args.get('nm')
-    password = request.args.get('pass')
+    username = request.form['name']
+    password = request.form['password']
     cursor = db.cursor()
 
     cursor.execute("SELECT * from users where name=%s and password=%s",(username,password))
