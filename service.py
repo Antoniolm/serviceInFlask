@@ -232,14 +232,14 @@ def pharmacy(idPharma):
         longitude = float(request.form['longitude'])
 
         cursor = db.cursor()
-        data = cursor.execute("UPDATE catalog SET name=%s, latitude=%s, longitude=%s WHERE id=%s", (name,latitude,longitude,idPharma))
+        data = cursor.execute("UPDATE pharmacies SET name=%s, latitude=%s, longitude=%s WHERE id=%s", (name,latitude,longitude,idPharma))
         db.commit()
 
         return jsonify(updatePharmacy="success")
 
     if request.method == 'DELETE':
         cursor = db.cursor()
-        cursor.execute("DELETE FROM catalog where id=%s", idPharma);
+        cursor.execute("DELETE FROM pharmacies where id=%s", idPharma);
         db.commit()
 
         return jsonify(removePharmacy="success")
