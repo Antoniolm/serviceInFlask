@@ -183,8 +183,69 @@ def product(idProduct):
 def doRequest():
     return jsonify(login="success")
 
+########################
+## Pharmacies
+########################
+
+@app.route("/pharmacies", methods=['GET', 'POST' , 'DELETE'])
+def pharmacies():
+    if request.method == 'GET':
+        jsonResult= jsonify()
+        cursor = db.cursor()
+        rows=cursor.execute("SELECT name,latitude,longitude FROM pharmacies")
+
+        columns = cursor.description
+        result = [{columns[index][0]:column for index, column in enumerate(value)}   for value in cursor.fetchall()]
+        return jsonify(result);
+
+    if request.method == 'POST':
+        name = request.form['name']
+        latitude = float(request.form['latitude'])
+        longitude = float(request.form['longitude'])
+
+        cursor = db.cursor()
+        cursor.execute("INSERT INTO pharmacies (name,latitude,longitude) VALUES(%s,%s,%s)", (name,latitude,longitude))
+        db.commit()
+
+        return jsonify(addPharmacies="success")
+
+    return jsonify(error="DontMethodDetected")
+
 ###################################################################
 
+@app.route("/pharmacies/<idPharma>", methods=['GET', 'POST' , 'DELETE'])
+def pharmacy(idPharma):
+    if request.method == 'GET':
+        cursor = db.cursor()
+
+        cursor.execute("SELECT * from pharmacies where id=%s", idPharma)
+        data = cursor.fetchone()
+
+        if data is None:
+            return jsonify(error="PharmacynotFound")
+        else:
+            return jsonify(name=data[1],latitude=data[2],longitude=data[3])
+
+    if request.method == 'POST':
+        name = request.form['name']
+        latitude = float(request.form['latitude'])
+        longitude = float(request.form['longitude'])
+
+        cursor = db.cursor()
+        data = cursor.execute("UPDATE catalog SET name=%s, latitude=%s, longitude=%s WHERE id=%s", (name,latitude,longitude,idPharma))
+        db.commit()
+
+        return jsonify(updatePharmacy="success")
+
+    if request.method == 'DELETE':
+        cursor = db.cursor()
+        cursor.execute("DELETE FROM catalog where id=%s", idPharma);
+        db.commit()
+
+        return jsonify(removePharmacy="success")
+    return jsonify(error="DontMethodDetected")
+
+###################################################################
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0')
 
