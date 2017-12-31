@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:14.04
 
 MAINTAINER Antonio David López Machado <antdlopma@gmail.com>
 WORKDIR /app
