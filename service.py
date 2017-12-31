@@ -54,9 +54,15 @@ def users():
         return jsonify(result);
 
     if request.method == 'POST':
-        username = request.form['name']
-        password = request.form['password']
-        client = int(request.form['client'])
+        if request.json:
+            content= request.get_json()
+            username = content.get('name')
+            password = content.get('password')
+            client = int(content.get('client'))
+        else :
+            username = request.form['name']
+            password = request.form['password']
+            client = int(request.form['client'])
 
         cursor = db.cursor()
         data = cursor.execute("INSERT INTO users (name,password,client) VALUES(%s,%s,%s)",(username,password,client))
@@ -82,9 +88,15 @@ def user(idUser):
             return jsonify(name=data[1],password=data[2],client=data[3])
 
     if request.method == 'POST':
-        username = request.form['name']
-        password = request.form['password']
-        client = int(request.form['client'])
+        if request.json:
+            content= request.get_json()
+            username = content.get('name')
+            password = content.get('password')
+            client = int(content.get('client'))
+        else :
+            username = request.form['name']
+            password = request.form['password']
+            client = int(request.form['client'])
 
         cursor = db.cursor()
         data = cursor.execute("UPDATE users SET name=%s, password=%s, client=%s WHERE id=%s", (username,password,client,idUser))
@@ -104,8 +116,14 @@ def user(idUser):
 
 @app.route("/login", methods=['POST'])
 def login():
-    username = request.form['name']
-    password = request.form['password']
+    if request.json:
+        content= request.get_json()
+        username = content.get('name')
+        password = content.get('password')
+    else :
+        username = request.form['name']
+        password = request.form['password']
+
     cursor = db.cursor()
 
     cursor.execute("SELECT * from users where name=%s and password=%s",(username,password))
@@ -132,9 +150,15 @@ def products():
         return jsonify(result);
 
     if request.method == 'POST':
-        name = request.form['name']
-        quantity = int(request.form['quantity'])
-        price = int(request.form['price'])
+        if request.json:
+            content= request.get_json()
+            name = content.get('name')
+            quantity = int(content.get('quantity'))
+            price = int(content.get('price'))
+        else :
+            name = request.form['name']
+            quantity = int(request.form['quantity'])
+            price = int(request.form['price'])
 
         cursor = db.cursor()
         cursor.execute("INSERT INTO catalog (name,quantity,price) VALUES(%s,%s,%s)", (name,quantity,price))
@@ -160,9 +184,15 @@ def product(idProduct):
             return jsonify(name=data[1],quantity=data[2],price=data[3])
 
     if request.method == 'POST':
-        name = request.form['name']
-        quantity = int(request.form['quantity'])
-        price = int(request.form['price'])
+        if request.json:
+            content= request.get_json()
+            name = content.get('name')
+            quantity = int(content.get('quantity'))
+            price = int(content.get('price'))
+        else :
+            name = request.form['name']
+            quantity = int(request.form['quantity'])
+            price = int(request.form['price'])
 
         cursor = db.cursor()
         data = cursor.execute("UPDATE catalog SET name=%s, quantity=%s, price=%s WHERE id=%s", (name,quantity,price,idProduct))
@@ -200,9 +230,15 @@ def pharmacies():
         return jsonify(result);
 
     if request.method == 'POST':
-        name = request.form['name']
-        latitude = float(request.form['latitude'])
-        longitude = float(request.form['longitude'])
+        if request.json:
+            content= request.get_json()
+            name = content.get('name')
+            latitude = float(content.get('latitude'))
+            longitude = float(content.get('longitude'))
+        else :
+            name = request.form['name']
+            latitude = float(request.form['latitude'])
+            longitude = float(request.form['longitude'])
 
         cursor = db.cursor()
         cursor.execute("INSERT INTO pharmacies (name,latitude,longitude) VALUES(%s,%s,%s)", (name,latitude,longitude))
@@ -228,9 +264,15 @@ def pharmacy(idPharma):
             return jsonify(name=data[1],latitude=data[2],longitude=data[3])
 
     if request.method == 'POST':
-        name = request.form['name']
-        latitude = float(request.form['latitude'])
-        longitude = float(request.form['longitude'])
+        if request.json:
+            content= request.get_json()
+            name = content.get('name')
+            latitude = float(content.get('latitude'))
+            longitude = float(content.get('longitude'))
+        else :
+            name = request.form['name']
+            latitude = float(request.form['latitude'])
+            longitude = float(request.form['longitude'])
 
         cursor = db.cursor()
         data = cursor.execute("UPDATE pharmacies SET name=%s, latitude=%s, longitude=%s WHERE id=%s", (name,latitude,longitude,idPharma))
