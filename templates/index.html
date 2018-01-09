@@ -1,0 +1,92 @@
+
+<html>
+<head>
+   <meta charset="UTF-8">
+   <link rel="stylesheet" type="text/css" href="../static/style.css">
+</head>
+
+<body>
+
+  <header>
+      <div class="container clearfix">
+          <h2 id="logo">
+              Api Restful - DSS - Practica 5 - Antonio David López Machado
+          </h2>
+      </div>
+  </header><!-- /header -->
+
+  <div id="main">
+      <div id="content">
+          <section>
+              <div class="container">
+                  <h1>Patch principales de la api</h1>
+                  <ul>
+                    <li>
+                      <b>/users/id_user</b>
+                      <ul>
+                        <li> <b>GET</b> -> <b>Sin ID</b>: obtiene todos los usuarios del sistema <b>Con ID</b>: obtiene el usuario con la ID especificada</li>
+                        <li> <b>POST</b> -> <b>Sin ID</b>: crea un nuevo usuario en el sistema  <b>Con ID</b>: actualiza la información de un usuario</li>
+                        <li> <b>DELETE</b> -> elimina el usuario con la ID especificada ( metodo activo solo cuando se especifica una ID)</li>
+                      </ul>
+                    </li>
+                    <hr>
+                    <li>
+                      <b>/products/id_product</b>
+                      <ul>
+                        <li> <b>GET</b> -> <b>Sin ID</b>: obtiene todos los productos del sistema <b>Con ID</b>: obtiene el producto con la ID especificada</li>
+                        <li> <b>POST</b> -> <b>Sin ID</b>: crea un nuevo producto en el sistema  <b>Con ID</b>: actualiza la información de un producto</li>
+                        <li> <b>DELETE</b> -> elimina el producto con la ID especificada ( metodo activo solo cuando se especifica una ID)</li>
+                      </ul>
+                    </li>
+                    <hr>
+                    <li>
+                      <b>/pharmacies/id_pharmacy</b>
+                      <ul>
+                        <li> <b>GET</b> -> <b>Sin ID</b>: obtiene todos los farmacias del sistema <b>Con ID</b>: obtiene la farmacia con la ID especificada</li>
+                        <li> <b>POST</b> -> <b>Sin ID</b>: crea una nueva farmacia en el sistema  <b>Con ID</b>: actualiza la información de una farmacia</li>
+                        <li> <b>DELETE</b> -> elimina la farmacia con la ID especificada ( metodo activo solo cuando se especifica una ID)</li>
+                      </ul>
+                    </li>
+                    <hr>
+                    <li>
+                      <b>/order/id_order</b>
+                      <ul>
+                        <li> <b>GET</b> -> <b>Sin ID</b>: obtiene todos las peticiones del sistema
+                        <li> <b>POST</b> -> <b>Sin ID</b>: crea una nueva petición en el sistema
+                        <li> <b>DELETE</b> -> elimina la farmacia con la ID especificada ( metodo activo solo cuando se especifica una ID)</li>
+                      </ul>
+                    </li>
+                    <hr>
+                    <li>
+                      <b>/login</b>
+                      <ul>
+                        <li> <b>POST</b> -> Permite comprobar si un conjunto (usuario,contraseña) existe en la base de datos
+                      </ul>
+                    </li>
+                    <hr>
+                    <li>
+                      <b>/requestProduct</b>
+                      <ul>
+                        <li> <b>POST</b> -> Permite actualizar los productos tras un pedido
+                      </ul>
+                    </li>
+                  </ul>
+
+
+              </div>
+          </section>
+      </div>
+  </div><!-- #main -->
+
+
+  <footer>
+  <div id="info-bar">
+      <div class="container clearfix">
+      </div>
+  </div><!-- /#top-bar -->
+  </footer><!-- /footer -->
+
+  </div><!-- /#wrapper -->
+
+</body>
+</html>
