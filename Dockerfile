@@ -6,6 +6,11 @@ WORKDIR /app
 ADD service.py /app/service.py
 ADD dbSchema.sql /app/dbSchema.sql
 
+RUN mkdir -p static
+
+ADD static/style.css /app/static/style.css
+ADD templates/index.html /app/templates/index.html
+
 RUN apt-get -y update
 RUN apt-get -y upgrade
 RUN apt-get install -y python-dev
