@@ -235,25 +235,57 @@ def product(idProduct):
         return jsonify(removeProduct="success")
     return jsonify(error="DontMethodDetected")
 
-###################################################################
+########################
+## Orders
+########################
 
-@app.route("/doOrder", methods=['POST'])
-def doOrder():
+@app.route("/orders", methods=['GET' , 'POST'])
+def orders():
     db = dbConnection()
 
-    if request.json:
-        content= request.get_json()
-        print(len(content))
-        print(content[0].get('prueba'))
+    if request.method == 'GET':
+        jsonResult= jsonify()
+        cursor = db.cursor()
+        rows=cursor.execute("SELECT id,name,products FROM orders")
 
-    cursor = db.cursor()
-    for i in range(0, len(content)):
-        data = cursor.execute("UPDATE catalog SET quantity=%s WHERE id=%s", (content[i].get('quantity'),content[i].get('id')))
+        columns = cursor.description
+        result = [{columns[index][0]:column for index, column in enumerate(value)}   for value in cursor.fetchall()]
+        db.close()
+
+        return jsonify(result);
+
+    if request.method == 'POST':
+        if request.json:
+            content= request.get_json()
+            name = content.get('name')
+            products = content.get('products')
+        else :
+            name = request.form['name']
+            products = request.form['products']
+
+        cursor = db.cursor()
+        cursor.execute("INSERT INTO orders (name,products) VALUES(%s,%s)", (name,products))
         db.commit()
+        db.close()
 
-    db.close()
+        return jsonify(addOrder="success")
 
-    return jsonify(request="success")
+    return jsonify(error="DontMethodDetected")
+
+###################################################################
+
+@app.route("/orders/<idOrder>", methods=['DELETE'])
+def order(idOrder):
+    db = dbConnection()
+
+    if request.method == 'DELETE':
+        cursor = db.cursor()
+        cursor.execute("DELETE FROM orders where id=%s", idOrder);
+        db.commit()
+        db.close()
+
+        return jsonify(removeOrder="success")
+    return jsonify(error="DontMethodDetected")
 
 ########################
 ## Pharmacies
