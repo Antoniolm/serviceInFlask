@@ -287,6 +287,26 @@ def order(idOrder):
         return jsonify(removeOrder="success")
     return jsonify(error="DontMethodDetected")
 
+###################################################################
+
+@app.route("/doOrder", methods=['POST'])
+def doOrder():
+    db = dbConnection()
+
+    if request.json:
+        content= request.get_json()
+        print(len(content))
+        print(content[0].get('prueba'))
+
+    cursor = db.cursor()
+    for i in range(0, len(content)):
+        data = cursor.execute("UPDATE catalog SET quantity=%s WHERE id=%s", (content[i].get('quantity'),content[i].get('id')))
+        db.commit()
+
+    db.close()
+
+    return jsonify(request="success")
+
 ########################
 ## Pharmacies
 ########################
