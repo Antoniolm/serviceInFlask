@@ -22,7 +22,7 @@ RuN echo "mysql-server mysql-server/root_password_again password root" | debconf
 RUN apt-get install -y mysql-server
 RUN apt-get install -y libmysqlclient-dev
 
-RUN pip install mysqlclient flask flask-mysqldb
+RUN pip install mysqlclient flask flask-mysqldb flask-CORS
 
 ENTRYPOINT ["python"]
 CMD ["service.py"]

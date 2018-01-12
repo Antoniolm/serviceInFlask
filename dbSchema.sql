@@ -22,7 +22,8 @@ INSERT INTO catalog (name,quantity,price) VALUES('vendas',25,3);
 INSERT INTO catalog (name,quantity,price) VALUES('baston',3,20);
 
 CREATE TABLE orders ( id INT NULL AUTO_INCREMENT,
-                       name VARCHAR(45) NULL,
+                       user VARCHAR(45) NULL,
+                       pharmacy VARCHAR(45) NULL,
                        products VARCHAR(450) NULL,
                        PRIMARY KEY (id));
 

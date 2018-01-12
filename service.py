@@ -3,6 +3,7 @@ from flask import jsonify
 from flask import render_template
 from flask import request
 from flask_mysqldb import MySQL
+from flask_cors import CORS
 import md5
 import MySQLdb
 import json
@@ -12,6 +13,8 @@ def dbConnection():
     return MySQLdb.connect(host="localhost", user = "root", passwd = "root", db = "pharmaciesDB")
 
 app = Flask(__name__)
+CORS(app)
+
 
 os.system("service mysql start")
 db = MySQLdb.connect(host="localhost",
