@@ -249,7 +249,7 @@ def orders():
     if request.method == 'GET':
         jsonResult= jsonify()
         cursor = db.cursor()
-        rows=cursor.execute("SELECT id,name,products FROM orders")
+        rows=cursor.execute("SELECT id,user,pharmacy,products FROM orders")
 
         columns = cursor.description
         result = [{columns[index][0]:column for index, column in enumerate(value)}   for value in cursor.fetchall()]
@@ -260,14 +260,16 @@ def orders():
     if request.method == 'POST':
         if request.json:
             content= request.get_json()
-            name = content.get('name')
+            name = content.get('user')
+            pharmacy = content.get('pharmacy')
             products = content.get('products')
         else :
             name = request.form['name']
+            pharmacy = request.form['pharmacy']
             products = request.form['products']
 
         cursor = db.cursor()
-        cursor.execute("INSERT INTO orders (name,products) VALUES(%s,%s)", (name,products))
+        cursor.execute("INSERT INTO orders (user,pharmacy,products) VALUES(%s,%s)", (name,pharmacy,products))
         db.commit()
         db.close()
 
