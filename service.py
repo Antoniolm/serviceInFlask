@@ -152,7 +152,7 @@ def login():
     if data is None:
         return jsonify(login="fail")
     else:
-        return jsonify(login="success")
+        return jsonify(login="success",client=data[3])
 
 ########################
 ## Products
@@ -264,12 +264,12 @@ def orders():
             pharmacy = content.get('pharmacy')
             products = content.get('products')
         else :
-            name = request.form['name']
+            name = request.form['user']
             pharmacy = request.form['pharmacy']
             products = request.form['products']
 
         cursor = db.cursor()
-        cursor.execute("INSERT INTO orders (user,pharmacy,products) VALUES(%s,%s)", (name,pharmacy,products))
+        cursor.execute("INSERT INTO orders (user,pharmacy,products) VALUES(%s,%s,%s)", (name,pharmacy,products))
         db.commit()
         db.close()
 
@@ -300,8 +300,6 @@ def doOrder():
 
     if request.json:
         content= request.get_json()
-        print(len(content))
-        print(content[0].get('prueba'))
 
     cursor = db.cursor()
     for i in range(0, len(content)):
