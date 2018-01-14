@@ -152,7 +152,7 @@ def login():
     if data is None:
         return jsonify(login="fail")
     else:
-        return jsonify(login="success",client=data[3])
+        return jsonify(login="success",id=data[0],name=data[1],client=data[3])
 
 ########################
 ## Products
@@ -285,7 +285,7 @@ def order(idOrder):
 
     if request.method == 'DELETE':
         cursor = db.cursor()
-        cursor.execute("DELETE FROM orders where id=%s", idOrder);
+        cursor.execute("DELETE FROM orders where id=%s", (idOrder,) );
         db.commit()
         db.close()
 
